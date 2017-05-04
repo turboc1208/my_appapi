@@ -230,6 +230,10 @@ class my_appapi(appapi.AppDaemon):
     else:
       ndf=False
     return ndf
+   
+  def db_data_found(self,datadict):
+    ndf= not self.no_data_found(self,datadict)
+    return ndf
 
   #######
   #
@@ -272,6 +276,9 @@ class my_appapi(appapi.AppDaemon):
   def db_commit(self,conn):
     conn.commit()
 
+  def db_save(self,conn):
+    self.db_commit(self,conn)
+
   ###############
   #
   # db_close - connection parameter
@@ -285,6 +292,9 @@ class my_appapi(appapi.AppDaemon):
   #             included for completeness
   def db_rollback(self,conn):
     conn.rollback()
+
+  def db_undo_changes(self,conn):
+    self.db_rollback(self,conn)
   
   ###########
   #
@@ -320,13 +330,13 @@ class my_appapi(appapi.AppDaemon):
         ret.append(r)
     return ret
 
-  def dbr_insert_row(self,conn,table,**kwargs):
+  def dbr_insert(self,conn,table,**kwargs):
     dlist=[]
     ddict={}
     for col in kwargs:
       ddict[col]=kwargs[col]
     dlist.append(ddict)
-    db_insert_row(conn,table,dlist)
+    db_insert(conn,table,dlist)
 
   ###############
   #
@@ -334,7 +344,7 @@ class my_appapi(appapi.AppDaemon):
   #     table - name of table
   #     data_dict - list of {column:data, col2,data} dictionaries
   # 
-  def db_insert_row(self,conn,table,data_dict):
+  def db_insert(self,conn,table,data_dict):
     for row in data_dict:
       #curr=conn.cursor()
       sqlstr="insert into " + table 
@@ -360,13 +370,13 @@ class my_appapi(appapi.AppDaemon):
       #finally:
         #curr.close()
 
-  def dbr_delete_row(self,conn,table,**kwargs):
+  def dbr_delete(self,conn,table,whereclause):
     dlist=[]
     ddict={}
     for col in kwargs:
       ddict[col]=kwargs[col]
       dlist.append[ddict]
-    self.db_delete_row(conn,table,dlist)
+    self.db_delete(conn,table,dlist,whereclause)
 
   ###############
   #
@@ -375,14 +385,17 @@ class my_appapi(appapi.AppDaemon):
   #     data_dict - {column:data, col2,data} dictionaries
   #  All tests are for equality and all conditions are logical and
   #
-  def db_delete_row(self,conn,table,wheredata):
+  def db_delete(self,conn,table,wheredata,whereclause=""):
     sqlstr="delete from " + table + " where "
-    i=0
-    for col in wheredata:
-      if i!=0:
-        sqlstr=sqlstr + " and "
-      sqlstr=sqlstr + col + "='" + wheredata[col] + "'"
-      i=i+1
+    if whereclause!="":
+      sqlstr=sqlstr+whereclause
+    else:
+      i=0
+      for col in wheredata:
+        if i!=0:
+          sqlstr=sqlstr + " and "
+        sqlstr=sqlstr + col + "='" + wheredata[col] + "'"
+        i=i+1
     self.log("sqlstr={}".format(sqlstr))
     #curr=conn.cursor()
     try:
@@ -395,13 +408,13 @@ class my_appapi(appapi.AppDaemon):
 
   ###############
   #
-  #  db_update_row -  Delete one or more rows in a table.
+  #  db_update -  Delete one or more rows in a table.
   #     table - name of table
   #     update_dict - {column:data, col2,data} dictionary
   #     where_dict - {column:data, col2,data} dictinary
   #  All where_dict tests are for equality and all conditions are logical and
   #
-  def db_update_row(self,conn,table,datadict,wheredata):
+  def db_update(self,conn,table,datadict,wheredata,whereclause=""):
     sqlstr="update " + table + " set "
     i=0
     for f in datadict:
@@ -410,11 +423,14 @@ class my_appapi(appapi.AppDaemon):
       sqlstr=sqlstr + f + "= '" + datadict[f] + "' "
       i=i+1
     sqlstr=sqlstr + " where "
-    i=0
-    for w in wheredata:
-      if i!=0:
-        sqlstr=sqlstr + " and "
-      sqlstr=sqlstr + w + " = '" + wheredata[w] + "' "
+    if whereclause!="":
+      sqlstr=sqlstr + whereclause
+    else:
+      i=0
+      for w in wheredata:
+        if i!=0:
+          sqlstr=sqlstr + " and "
+        sqlstr=sqlstr + w + " = '" + wheredata[w] + "' "
     self.log("update sqlstr={}".format(sqlstr)) 
     #curr=conn.cursor()
     try:
