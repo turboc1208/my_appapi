@@ -1,6 +1,8 @@
 # my_appapi
 my helper functions
 <P>
+* Note there are other functions at the top of the file that are part of my personal toolkit.  Please feel free to remove them or keep them.  its up to you.
+<p>
 AppDaemon Database Tools<P>
 
 These tools provide a wrapper around the standard sqlite3 python package.  The following functions are available in limited form.<P>
