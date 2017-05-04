@@ -22,7 +22,7 @@ These tools provide a wrapper around the standard sqlite3 python package.  The f
 <li>dbr_insert – insert a single row into a table using kwargs to pass data
 <li>db_update – update one or more rows in a table using dictionary or string to pass data
 <li>db_delete – delete one or more rows in table using dictionary or string to pass “where” criteria
-<li>dbr_delete_row – delete one or more rows in table using a string to pass “where” criteria
+<li>dbr_delete – delete one or more rows in table using a string to pass “where” criteria
 </ul>
 
 
@@ -143,7 +143,7 @@ If no data is found a single row with no data is returned:<p>
   Example:
   rowData=[{“ha_name”:”light.office_light”,”room”:”office”},
            {“ha_name”:”switch.den_light”,”room”:”den”}]
-  db_insert_row(conn,”device”,rowData)
+  db_insert(conn,”device”,rowData)
 </pre><p>
 This will add two rows into table “device”.  One row will have a ha_name of “light.office_light” 
 and a room of “office”.  The other row will have a ha_name of “switch.den_light” and a room of “den”.
@@ -154,7 +154,7 @@ and a room of “office”.  The other row will have a ha_name of “switch.den_
 <p>
   Example:<P>
 <pre>
-    Dbr_insert_row(conn,”device”,ha_name=”light.office_light”,
+    dbr_insert(conn,”device”,ha_name=”light.office_light”,
                                  room=”office”)
 </pre><p>
 This will insert a row into the “device” table, setting the ha_name field to “light.office_light” and the room field to “office”.  
@@ -203,11 +203,11 @@ This will delete the row from the “device” table where ha_name=”light.offi
 </pre>
 This will achieve the same result using the whereclause arguement
 <p>
-<h1>dbr_delete_row(connHandle,tableName,whereclause)</h1>
+<h1>dbr_delete(connHandle,tableName,whereclause)</h1>
   Delete row from tableName matching the whereclause.<p>
 Example:<br>
 <pre>
-  Dbr_delete_row(conn,”device”,"ha_name='light.office_light' and room='office')
+  dbr_delete(conn,”device”,"ha_name='light.office_light' and room='office')
 </pre><p>
 This will delete the row from the “device” table where ha_name=”light.office_light” and where room=”office”
 
