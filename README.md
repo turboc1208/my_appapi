@@ -35,17 +35,18 @@ Returns: ConnHandle<p>
    Rollsback any uncommitted changes.
 <p>
 <h1>db_no_data_found(datadictionary)</h1>
-  Return True or False depending on whether datadictionary is the result of a query that returned no rows.  The returnvalue of the db_select is passed in as datadictionary.
-True = no data was found in the select
+  Return True or False depending on whether datadictionary is the result of a query that returned no rows.  The returnvalue of the db_select is passed in as datadictionary.<br>
+True = no data was found in the select.<br>
 False = Data was returned by the query.  Data being returned means that either more than one row was returned, or the data fields in row returned had something other than “” in at least one of them.
-
-Example:
+<p>
+Example:<br>
+'''
 If self.db_no_data_found(self.db_select(“select ‘x’ from device where room=’office’”)):
   Self.log(“no data fould for room=office”)
 Else:
   Self.log(“data found for room=office”)
   Process data
-
+'''
 
 <p>
 <h1>db_create_table(connHandle, TableName, Cols_Dictionary, (table_constraints def=””))</h1>
