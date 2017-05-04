@@ -114,59 +114,63 @@ If no data is found a single row with no data is returned:<p>
 <p>
 <h1>db_insert_row(connHandle, TableName, DataDictionary)</h1>
   Insert one or more rows into tableName.  Rows are passed in the datadictionary using a list of dictionaries.
-
+<pre>
   Example:
   rowData=[{“ha_name”:”light.office_light”,”room”:”office”},
            {“ha_name”:”switch.den_light”,”room”:”den”}]
   db_insert_row(conn,”device”,rowData)
-
+</pre><p>
 This will add two rows into table “device”.  One row will have a ha_name of “light.office_light” 
 and a room of “office”.  The other row will have a ha_name of “switch.den_light” and a room of “den”.
 
 <p>
 <h1>dbr_insert_row(connHandle, TableName, kwargs)</h1>
   Insert one row into tablename setting the field values to the variables and associated values in kwargs.
-
-  Example:
+<p>
+  Example:<P>
+<pre>
     Dbr_insert_row(conn,”device”,ha_name=”light.office_light”,
                                  room=”office”)
-
+</pre><p>
 This will insert a row into the “device” table, setting the ha_name field to “light.office_light” and the room field to “office”.  
 
 
 <p>
 <h1>db_update_row(connHandle,tableName,DataDict,WhereDict)</h1>
   Update rows in tablename  
-   Update tablename set DataDict where wheredict
-  DataDict and where Dict are dictionaries of the form {column:value,column:value)
-  For the Datadict the column:value pairs are the set clause setting column = value.
-  For the wheredict, the colum:value pairs are the where clause where column=value
-Both Datadict and wheredict can contain multiple fields.  In the datadict, the column=value clause is separated from the next column=value pair by a ‘,’.  In the wheredict, column=value combinations are separated with an AND.  Or is not supported at this time.
-
-Example:
+   Update tablename set DataDict where wheredict<P>
+   DataDict and WhereDict are dictionaries of the form <pre>{column:value,column:value}</pre><br>
+  For the Datadict the column:value pairs are the set clause setting column = value.<br>
+  For the wheredict, the colum:value pairs are the where clause where column=value<br>
+Both Datadict and wheredict can contain multiple fields.  In the datadict, when converted to a SQL statement, the column=value clause is separated from the next column=value pair by a ‘,’.  In the wheredict, when converted to a SQL statement, column=value combinations are separated with an AND.  Or is not supported at this time.
+<p>
+Example:<br>
+<pre>
 Ddict={“ha_name”:”switch.my_room”,”room”:”sams”}
 Wdict={“ha_name”:”switch.den_light”}
 Db_update_for(conn,”device”,ddict,wdict)
-
+</pre>
 This will update all rows with a ha_name of “switch.den_light” to have a name of “switch.my_room” and a room of “sams”.
 
 
 <p>
 <h1>db_delete_row(connHandle,tableName,WhereDict)</h1>
-  Delete row from tableName where WhereDict matches.
-  Where dict is a column:value pair.  If multiple colum:value pairs are given, column:value pairs will be separated with an AND.  Or is not supported at this time.
-
-Example:
+  Delete row from tableName where WhereDict matches.<br>
+  Where dict is a column:value pair.  If multiple colum:value pairs are given, when converted to a SQL statement column:value pairs will be separated with an AND.  Or is not supported at this time.
+<p>
+Example:<br>
+<pre>
   Db_delete_row(conn,”device”,{“ha_name”:”light.office_light”,”room”:”office”})
-
+</pre>
 This will delete the row from the “device” table where ha_name=”light.office_light” and where room=”office”
 
 <p>
 <h1>dbr_delete_row(connHandle,tableName,kwargs)</h1>
-  Delete row from tableName where kwargs contains the fields and values for the where clause.
-Example:
+  Delete row from tableName where kwargs contains the fields and values for the where clause.<p>
+Example:<br>
+<pre>
   Dbr_delete_row(conn,”device”,ha_name=”light.office_light”, room=”office”)
-
+</pre><p>
 This will delete the row from the “device” table where ha_name=”light.office_light” and where room=”office”
 
 
