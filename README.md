@@ -21,13 +21,13 @@ These tools provide a wrapper around the standard sqlite3 python package.  The f
 </ul>
 
 
-db_open(“full path database filename”)
-  Opens a connectionHandle used by all other functions.  The full path to the database file is used as an argument.  If the database does not exist it is created.  
-Returns: ConnHandle
+<h1>db_open(“full path database filename”)</h1>
+  Opens a connectionHandle used by all other functions.  The full path to the database file is used as an argument.  If the database does not exist it is created.  <br>
+Returns: ConnHandle<p>
 
-db_close(connHandle)
+<h1>db_close(connHandle)</h1>
    Closes the connectionHandle and unlocks the database.
-
+<p>
 db_commit(connHandle)
    Writes any uncommitted changes to the database.
 
