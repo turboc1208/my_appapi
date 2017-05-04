@@ -50,27 +50,35 @@ Else:
 
 <p>
 <h1>db_create_table(connHandle, TableName, Cols_Dictionary, (table_constraints def=””))</h1>
-  Create a table named TableName.  Columns and column attributes are passed in the cols_Dictionary.  Table_Constraints is a string used to pass any table level constraints.  
+  Create a table named TableName.  Columns and column attributes are passed in the cols_Dictionary.  Table_Constraints is a string used to pass any table level constraints. 
+<pre>
   Cols_Dictionary={“Column1”:”Atributes”,
                    “Column2”:”Attributes”,
-                                 … }
-  Column names are strings.  
-  Attributes : 
-      Type : 
-•	Varchar2
-•	Integer
-•	Date
-     Other:
-•	Primary key   
-•	Primary key autoincrement   * Can only be used with an integer type primary key
-•	Unique
+                   … }
+ </pre><br>
+  Column names are strings.
+  <ul>
+      <li>Attributes : 
+          <ul><li>Type : 
+              <ul><li>Varchar2
+                  <li>Integer
+                  <li>Date</ul>
+              <li>Other:
+              <ul><li>Primary key   
+                  <li>Primary key autoincrement   
+                  <li>Can only be used with an integer type primary key
+                  <li>Unique</ul>
+                  </ul>
+                  </ul>
+ <p>
 Example:
+<pre>
    Conn=db_open(“/home/homeassistant/mydb.sqlite”)
    Col_dict={“Entity_id”:”integer primary key autoincrement”,
              “HA_Name”:”varchar2 unique”,
              “room”,”varchar2”}
    Db_create_table(Conn,”Entity”,Col_dict)
-
+</pre><p>
 This will create a database in the /home/homeassistant directory named mydb.sqlite.  In that database, a table will be created named Entity.  The Entity table has three columns.  
      Entity_id  - integer, primary key, autoincrements on insert
      HA_Name – varchar2 (string), unique values
