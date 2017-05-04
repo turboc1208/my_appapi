@@ -1,24 +1,24 @@
 # my_appapi
 my helper functions
+<P>
+AppDaemon Database Tools<P>
 
-AppDaemon Database Tools
-
-These tools provide a wrapper around the standard sqlite3 python package.  The following functions are available in limited form.
-
-db_open – open / create database file on filesystem
-db_close – close currently open database
-db_commit – write changes to disk
-db_rollback – reverse all changes since last commit.
-db_no_data_found – check if last query resulted in no rows returned.
-db_create_table – Create table
-db_query – perform non-data returning queries (insert, update, delete, etc)
-db_select – perform data returning queries (select)
-db_insert_row – insert a row into a table using dictionary to pass data
-dbr_insert_row – insert a row into a table using kwargs to pass data
-db_update_row – update a row in a table using dictionary to pass data
-db_delete_row – delete row in table using dictionary to pass “where” criteria
-dbr_delete_row – delete row in table using kwargs to pass “where” criteria
-
+These tools provide a wrapper around the standard sqlite3 python package.  The following functions are available in limited form.<P>
+<ul>
+<li>db_open – open / create database file on filesystem
+<li>db_close – close currently open database
+<li>db_commit – write changes to disk
+<li>db_rollback – reverse all changes since last commit.
+<li>db_no_data_found – check if last query resulted in no rows returned.
+<li>db_create_table – Create table
+<li>db_query – perform non-data returning queries (insert, update, delete, etc)
+<li>db_select – perform data returning queries (select)
+<li>db_insert_row – insert a row into a table using dictionary to pass data
+<li>dbr_insert_row – insert a row into a table using kwargs to pass data
+<li>db_update_row – update a row in a table using dictionary to pass data
+<li>db_delete_row – delete row in table using dictionary to pass “where” criteria
+<li>dbr_delete_row – delete row in table using kwargs to pass “where” criteria
+</ul>
 
 
 db_open(“full path database filename”)
