@@ -10,16 +10,19 @@ These tools provide a wrapper around the standard sqlite3 python package.  The f
 <li>db_open – open / create database file on filesystem
 <li>db_close – close currently open database
 <li>db_commit – write changes to disk
+<li>db_save - write changes to disk
 <li>db_rollback – reverse all changes since last commit.
+<li>db_undo_changes - reverse all changes since last commit.
 <li>db_no_data_found – check if last query resulted in no rows returned.
+<li>db_data_found - check if last query returned data.
 <li>db_create_table – Create table
 <li>db_query – perform non-data returning queries (insert, update, delete, etc)
 <li>db_select – perform data returning queries (select)
-<li>db_insert_row – insert a row into a table using dictionary to pass data
-<li>dbr_insert_row – insert a row into a table using kwargs to pass data
-<li>db_update_row – update a row in a table using dictionary to pass data
-<li>db_delete_row – delete row in table using dictionary to pass “where” criteria
-<li>dbr_delete_row – delete row in table using kwargs to pass “where” criteria
+<li>db_insert – insert one or more rows into a table using dictionary to pass data
+<li>dbr_insert – insert a single row into a table using kwargs to pass data
+<li>db_update – update one or more rows in a table using dictionary to pass data
+<li>db_delete – delete one or more rows in table using dictionary to pass “where” criteria
+<li>dbr_delete_row – delete one or more rows in table using kwargs to pass “where” criteria
 </ul>
 
 
@@ -33,8 +36,14 @@ Returns: ConnHandle<p>
 <h1>db_commit(connHandle)</h1>
    Writes any uncommitted changes to the database.
 <p>
+<h1>db_save(connHandle)</h1>
+   Writes any uncommitted changes to the database.
+<p>
 <h1>db_rollback(connHandle)</h1>
    Rollsback any uncommitted changes.
+<p>
+<h1>db_undo_changes(connHandle)</h1>
+   Undo any uncommitted changes.
 <p>
 <h1>db_no_data_found(datadictionary)</h1>
   Return True or False depending on whether datadictionary is the result of a query that returned no rows.  The returnvalue of the db_select is passed in as datadictionary.<br>
@@ -49,6 +58,20 @@ Else:
   Self.log(“data found for room=office”)
   Process data
   </pre><p>
+  <h1>db_data_found(datadictionary)</h1>
+  Return True or False depending on whether datadictionary is the result of a query that returned one or more rows.  The returnvalue of the db_select is passed in as datadictionary.<br>
+True = Data was returned by the query.  Data being returned means that either more than one row was returned, or the data fields in row returned had something other than “” in at least one of them.
+False = no data was found in the select.<br>
+<p>
+Example:<br>
+<p><pre>
+If self.db_data_found(self.db_select(“select ‘x’ from device where room=’office’”)):
+  Self.log(“data fould for room=office”)
+  process data
+Else:
+  Self.log(“No data found for room=office”)
+  </pre><p>
+
 
 <p>
 <h1>db_create_table(connHandle, TableName, Cols_Dictionary, (table_constraints def=””))</h1>
@@ -114,7 +137,7 @@ If no data is found a single row with no data is returned:<p>
 
 
 <p>
-<h1>db_insert_row(connHandle, TableName, DataDictionary)</h1>
+<h1>db_insert(connHandle, TableName, DataDictionary)</h1>
   Insert one or more rows into tableName.  Rows are passed in the datadictionary using a list of dictionaries.
 <pre>
   Example:
@@ -126,7 +149,7 @@ This will add two rows into table “device”.  One row will have a ha_name of 
 and a room of “office”.  The other row will have a ha_name of “switch.den_light” and a room of “den”.
 
 <p>
-<h1>dbr_insert_row(connHandle, TableName, kwargs)</h1>
+<h1>dbr_insert(connHandle, TableName, kwargs)</h1>
   Insert one row into tablename setting the field values to the variables and associated values in kwargs.
 <p>
   Example:<P>
@@ -138,40 +161,53 @@ This will insert a row into the “device” table, setting the ha_name field to
 
 
 <p>
-<h1>db_update_row(connHandle,tableName,DataDict,WhereDict)</h1>
+<h1>db_update(connHandle,tableName,DataDict,WhereDict,(whereclause=""))</h1>
   Update rows in tablename  
    Update tablename set DataDict where wheredict<P>
    DataDict and WhereDict are dictionaries of the form <pre>{column:value,column:value}</pre><br>
+   whereclause is an optional text parameter that overrides the "wheredict" and is an actual where clause (without the word "where")
   For the Datadict the column:value pairs are the set clause setting column = value.<br>
   For the wheredict, the colum:value pairs are the where clause where column=value<br>
-Both Datadict and wheredict can contain multiple fields.  In the datadict, when converted to a SQL statement, the column=value clause is separated from the next column=value pair by a ‘,’.  In the wheredict, when converted to a SQL statement, column=value combinations are separated with an AND.  Or is not supported at this time.
+  <br>
+Both Datadict and wheredict can contain multiple fields.  In the datadict, when converted to a SQL statement, the column=value clause is separated from the next column=value pair by a ‘,’.  In the wheredict, when converted to a SQL statement, column=value combinations are separated with an AND.  Or is not supported at this time.<br>
+See the seciont on "basic SQL" for help building a where clause.
 <p>
 Example:<br>
 <pre>
 Ddict={“ha_name”:”switch.my_room”,”room”:”sams”}
 Wdict={“ha_name”:”switch.den_light”}
-Db_update_for(conn,”device”,ddict,wdict)
+db_update(conn,”device”,ddict,wdict)
 </pre>
 This will update all rows with a ha_name of “switch.den_light” to have a name of “switch.my_room” and a room of “sams”.
-
+<p>
+<pre>
+Ddict={“ha_name”:”switch.my_room”,”room”:”sams”}
+Wdict={}
+db_update(conn,"device",ddict,wdict,"ha_name='switch.den_light'")
+</pre>
+This would achieve the same results using the whereclause option.
 
 <p>
-<h1>db_delete_row(connHandle,tableName,WhereDict)</h1>
+<h1>db_delete(connHandle,tableName,WhereDict,(whereclause))</h1>
   Delete row from tableName where WhereDict matches.<br>
   Where dict is a column:value pair.  If multiple colum:value pairs are given, when converted to a SQL statement column:value pairs will be separated with an AND.  Or is not supported at this time.
+whereclause is an optional text parameter that overrides the "wheredict" and is an actual where clause (without the word "where")
 <p>
 Example:<br>
 <pre>
-  Db_delete_row(conn,”device”,{“ha_name”:”light.office_light”,”room”:”office”})
+  db_delete(conn,”device”,{“ha_name”:”light.office_light”,”room”:”office”})
 </pre>
 This will delete the row from the “device” table where ha_name=”light.office_light” and where room=”office”
-
+<pre>
+  db_delete(conn,"device","ha_name='light.office_light' and room='office'")
+</pre>
+This will achieve the same result using the whereclause arguement
 <p>
-<h1>dbr_delete_row(connHandle,tableName,kwargs)</h1>
-  Delete row from tableName where kwargs contains the fields and values for the where clause.<p>
+<h1>dbr_delete_row(connHandle,tableName,whereclause)</h1>
+  Delete row from tableName matching the whereclause.<p>
 Example:<br>
 <pre>
-  Dbr_delete_row(conn,”device”,ha_name=”light.office_light”, room=”office”)
+  Dbr_delete_row(conn,”device”,"ha_name='light.office_light' and room='office')
 </pre><p>
 This will delete the row from the “device” table where ha_name=”light.office_light” and where room=”office”
 
