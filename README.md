@@ -20,9 +20,9 @@ These tools provide a wrapper around the standard sqlite3 python package.  The f
 <li>db_select – perform data returning queries (select)
 <li>db_insert – insert one or more rows into a table using dictionary to pass data
 <li>dbr_insert – insert a single row into a table using kwargs to pass data
-<li>db_update – update one or more rows in a table using dictionary to pass data
-<li>db_delete – delete one or more rows in table using dictionary to pass “where” criteria
-<li>dbr_delete_row – delete one or more rows in table using kwargs to pass “where” criteria
+<li>db_update – update one or more rows in a table using dictionary or string to pass data
+<li>db_delete – delete one or more rows in table using dictionary or string to pass “where” criteria
+<li>dbr_delete_row – delete one or more rows in table using a string to pass “where” criteria
 </ul>
 
 
