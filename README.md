@@ -79,38 +79,41 @@ Example:
              “room”,”varchar2”}
    Db_create_table(Conn,”Entity”,Col_dict)
 </pre><p>
-This will create a database in the /home/homeassistant directory named mydb.sqlite.  In that database, a table will be created named Entity.  The Entity table has three columns.  
-     Entity_id  - integer, primary key, autoincrements on insert
-     HA_Name – varchar2 (string), unique values
-     Room – varchar2 (string)
-
+This will create a database in the /home/homeassistant directory named mydb.sqlite.  In that database, a table will be created named Entity.  The Entity table has three columns.
+<ul>
+   <li>Entity_id  - integer, primary key, autoincrements on insert
+   <li>HA_Name – varchar2 (string), unique values
+   <li>Room – varchar2 (string)
+</ul><p>
 
 <p>
 <h1>db_query(connHandle,query_string)</h1>
   Runs the specified query_statement.  The query string is a free form string.  Build your own sq lstatement.  Use this statement for non-returning sql statements, like (Insert, Update, Delete, Create Table, …).  The db_select function performs a select and returns the appropriate dataset for processing.
-
+<p>
 Return value is undefined.
 
 <p>
 <h1>db_select(connHandle, select_string)</h1>
   Runs the select_string.  The select string is a free form string.  Build your own sql statement.
-
-   returns a list of dictionaries in the form of 
+<p>
+   returns a list of dictionaries in the form of <p>
+<pre>
 [{Column1:Data row1, Column2:Data row1},
  {Column1:Data row2, Column2: Data row2}]
-
-A single row is still returned as a list of Dictionaries, there is just one dictionary.
+</pre><p>
+A single row is still returned as a list of Dictionaries, there is just one dictionary.<p>
+<pre>
 [{column1:Data row1, Column2: Data row1}]
-
-If no data is found a single row with no data is returned:
+</pre><p>
+If no data is found a single row with no data is returned:<p>
+<pre>
 [{column1:””, Column2:””}]
-
+</pre><p>
 
 
 <p>
 <h1>db_insert_row(connHandle, TableName, DataDictionary)</h1>
-  Insert one or more rows into tableName
-  Rows are passed in the datadictionary using a list of dictionaries.
+  Insert one or more rows into tableName.  Rows are passed in the datadictionary using a list of dictionaries.
 
   Example:
   rowData=[{“ha_name”:”light.office_light”,”room”:”office”},
