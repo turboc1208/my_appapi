@@ -28,13 +28,13 @@ Returns: ConnHandle<p>
 <h1>db_close(connHandle)</h1>
    Closes the connectionHandle and unlocks the database.
 <p>
-db_commit(connHandle)
+<h1>db_commit(connHandle)</h1>
    Writes any uncommitted changes to the database.
-
-db_rollback(connHandle)
+<p>
+<h1>db_rollback(connHandle)</h1>
    Rollsback any uncommitted changes.
-
-db_no_data_found(datadictionary)
+<p>
+<h1>db_no_data_found(datadictionary)</h1>
   Return True or False depending on whether datadictionary is the result of a query that returned no rows.  The returnvalue of the db_select is passed in as datadictionary.
 True = no data was found in the select
 False = Data was returned by the query.  Data being returned means that either more than one row was returned, or the data fields in row returned had something other than “” in at least one of them.
@@ -47,7 +47,8 @@ Else:
   Process data
 
 
-db_create_table(connHandle, TableName, Cols_Dictionary,                        (table_constraints def=””))
+<p>
+<h1>db_create_table(connHandle, TableName, Cols_Dictionary, (table_constraints def=””))</h1>
   Create a table named TableName.  Columns and column attributes are passed in the cols_Dictionary.  Table_Constraints is a string used to pass any table level constraints.  
   Cols_Dictionary={“Column1”:”Atributes”,
                    “Column2”:”Attributes”,
@@ -75,12 +76,14 @@ This will create a database in the /home/homeassistant directory named mydb.sqli
      Room – varchar2 (string)
 
 
-db_query(connHandle,query_string)
+<p>
+<h1>db_query(connHandle,query_string)</h1>
   Runs the specified query_statement.  The query string is a free form string.  Build your own sq lstatement.  Use this statement for non-returning sql statements, like (Insert, Update, Delete, Create Table, …).  The db_select function performs a select and returns the appropriate dataset for processing.
 
 Return value is undefined.
 
-db_select(connHandle, select_string)
+<p>
+<h1>db_select(connHandle, select_string)</h1>
   Runs the select_string.  The select string is a free form string.  Build your own sql statement.
 
    returns a list of dictionaries in the form of 
@@ -95,7 +98,8 @@ If no data is found a single row with no data is returned:
 
 
 
-db_insert_row(connHandle, TableName, DataDictionary)
+<p>
+<h1>db_insert_row(connHandle, TableName, DataDictionary)</h1>
   Insert one or more rows into tableName
   Rows are passed in the datadictionary using a list of dictionaries.
 
@@ -107,7 +111,8 @@ db_insert_row(connHandle, TableName, DataDictionary)
 This will add two rows into table “device”.  One row will have a ha_name of “light.office_light” 
 and a room of “office”.  The other row will have a ha_name of “switch.den_light” and a room of “den”.
 
-Dbr_insert_row(connHandle, TableName, kwargs)
+<p>
+<h1>dbr_insert_row(connHandle, TableName, kwargs)</h1>
   Insert one row into tablename setting the field values to the variables and associated values in kwargs.
 
   Example:
@@ -117,7 +122,8 @@ Dbr_insert_row(connHandle, TableName, kwargs)
 This will insert a row into the “device” table, setting the ha_name field to “light.office_light” and the room field to “office”.  
 
 
-db_update_row(connHandle,tableName,DataDict,WhereDict)
+<p>
+<h1>db_update_row(connHandle,tableName,DataDict,WhereDict)</h1>
   Update rows in tablename  
    Update tablename set DataDict where wheredict
   DataDict and where Dict are dictionaries of the form {column:value,column:value)
@@ -133,7 +139,8 @@ Db_update_for(conn,”device”,ddict,wdict)
 This will update all rows with a ha_name of “switch.den_light” to have a name of “switch.my_room” and a room of “sams”.
 
 
-db_delete_row(connHandle,tableName,WhereDict)
+<p>
+<h1>db_delete_row(connHandle,tableName,WhereDict)</h1>
   Delete row from tableName where WhereDict matches.
   Where dict is a column:value pair.  If multiple colum:value pairs are given, column:value pairs will be separated with an AND.  Or is not supported at this time.
 
@@ -142,7 +149,8 @@ Example:
 
 This will delete the row from the “device” table where ha_name=”light.office_light” and where room=”office”
 
-Dbr_delete_row(connHandle,tableName,kwargs)
+<p>
+<h1>dbr_delete_row(connHandle,tableName,kwargs)</h1>
   Delete row from tableName where kwargs contains the fields and values for the where clause.
 Example:
   Dbr_delete_row(conn,”device”,ha_name=”light.office_light”, room=”office”)
