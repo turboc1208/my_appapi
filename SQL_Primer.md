@@ -1,63 +1,15 @@
 
-<p>SQL is a standard syntax for talking to relational databases
-like Access, MySQL, SQLite, Oracle, SQL Server, etc. There are some differences from platform
-to platform, but for the most part it is very transportable between
-platforms. That is part of what
-makes it such a great tool. 
+<p>SQL is a standard syntax for talking to relational databases like Access, MySQL, SQLite, Oracle, SQL Server, etc. There are some differences from platform to platform, but for the most part it is very transportable between platforms. That is part of what makes it such a great tool. 
 
+<p>A database is a fancy way of saying a group of one or more data files tied together by links. Using a broad definition of database, the Web is a database. It has information and there are hyperlinks that relates the information. A database can be built using a database using spreadsheets like Excel. In excel a formula in a cell can link to other cells either on the same sheet, in the same workbook, or even other workbooks. Think about a mailing list in word that pulls names and address from a text file. That?s another example of a database. These examples work fine when you are dealing with a couple of hundred rows like maybe an invitation list for a wedding. Now imagine the records your city maintains for driver?s registration. There are tens to hundreds of thousands of names in that list. That would be nearly impossible to maintain in a spreadsheet. At the very least, it would be very slow. 
 
+<p>This is where databases come in. Databases provide an optimized way to deal with large quantities of related data in a fast, efficient manner. But at their most basic, they are just a spreadsheet or a mailing list.
 
-<p>A database is a fancy way of saying a group of one or more data
-files tied together by links. Using
-a broad definition of database, the Web is a database. It has information and there are hyperlinks
-that relates the information. A
-database can be built using a database using spreadsheets like Excel. In excel a formula in a cell can link to
-other cells either on the same sheet, in the same workbook, or even other
-workbooks. Think about a mailing
-list in word that pulls names and address from a text file. That?s another example of a
-database. These examples work fine
-when you are dealing with a couple of hundred rows like maybe an invitation
-list for a wedding. Now imagine the
-records your city maintains for driver?s registration. There are tens to hundreds of thousands
-of names in that list. That would
-be nearly impossible to maintain in a spreadsheet. At the very least, it would be very
-slow. 
+<p>To get the information out of a database, we need a way to ask the database for the information we want. That language is called Structured Query Language or SQL. SQL statements can be as simple or complex as needed. 
 
+<p>Databases use Tables to store data. Tables have rows of data in them much like a spreadsheet has rows of data in it. Each row of data in a table is related to itself. There might be a row with my name, driver?s license and address on it. Another row might have your name, driver?s license and address on it. For each person, we capture the same information in the table. A database can have one or more table.
 
-
-<p>This is where databases come in. Databases provide an optimized way to
-deal with large quantities of related data in a fast, efficient manner. But at their most basic, they are just a
-spreadsheet or a mailing list.
-
-
-
-<p>To get the information out of a database, we need a way to
-ask the database for the information we want. That language is called Structured Query
-Language or SQL. SQL statements can
-be as simple or complex as needed. 
-
-
-
-<p>Databases use Tables to store data. Tables have rows of data in them much
-like a spreadsheet has rows of data in it.
-Each row of data in a table is related to itself. There might be a row with my name, driver?s
-license and address on it. Another
-row might have your name, driver?s license and address on it. For each person, we capture the same
-information in the table. A
-database can have one or more table.
-
-
-
-
-<p>Let?s think about home automation for a minute. With home automation, we are concerned
-with two basic things. The first is
-our house and the rooms in the house.
-The second is the devices. Each
-of these things are completely different and can function independently of each
-other. So lets try to describe this in a database by creating two
-tables.
-
-
+<p>Let's think about home automation for a minute. With home automation, we are concerned with two basic things. The first is our house and the rooms in the house. The second is the devices. Each of these things are completely different and can function independently of each other. So lets try to describe this in a database by creating two tables.
 
 <p><pre>
 DEVICE                   HOUSE
@@ -72,95 +24,43 @@ MAX_BRIGHTNESS
 ROOM 
 </pre>
 <p>  
+First understand that I made up these tables and names to illustrate a point. These ae not necessarily the way tables should be setup in a good database.  However, they will work to illustrate the points in this document.
 
-First
-understand that I made up these tables and names to illustrate a point. These ae not necessarily the way tables
-should be setup in a good database.
-However, they will work to illustrate the points in this document.
-
-The DEVICE table holds information about each device we are interested in controlling. If your app is not
-controlling some of the devices, in your house, those devices do not need to be in the table.   
-
+The DEVICE table holds information about each device we are interested in controlling. If your app is not controlling some of the devices, in your house, those devices do not need to be in the table.   
 <p>  
-
-HA_NAME ?
-the HomeAssistant name for the device (light.office_lights, media_player.den_directv, device_tracker.sam,etc). We will use this column as the key
-column to access this table. A good
-key column should be unique and by definition, the HomeAssistant
-name of a device is unique.
-
-USE_TYPE ? This
-is a field that describes how the device is used. This does not necessarily match the HomeAssistant device type. For example, light.den_ceiling_fan,
-is a homeassistant light (a device that is
-dimmable). But we are using the
-light switch to control a ceiling fan.
-So the USE_TYPE could be FAN. Whereas light.den_ceiling_fan_light
-is a light kit mounted on the ceiling fan and controlled separately. This allows us to figure out what light.ceiling_fan_light is without
-having to parse the name and guess what it is.
-
-ON_STATE ?
-Some devices indicate they are on by setting their state to ?on?. Others like the media player in my den,
-use ?playing? to indicate they are on.
-When the door to my office is open, it?s state is 23. This gives us a way to know what to
-check for when we check the state on a device.
-
-OFF_STATE ?
-Like ON_STATE just tracks the values associated with OFF for each device.
-
-ON_BRIGHTNESS
-? When a light or fan is turned on, what brightness should be used.
-
-OFF_BRIGHTNESS
-? When a light or fan is turned off, what brightness should be used. We have one room in our house that is
-always hot so we like to keep the ceiling fan running at half speed even when
-no one is home. So
-the off_brightness for this fan can be set to half it?s
-max_brightness.
-
-MAX_BRIGHTNESS
-? what is the value associated with max brightness for this device.
-
-ROOM ? what
-room is the device installed in.
-This should match one of the room names in the ROOM table.
-
+HA_NAME - the HomeAssistant name for the device (light.office_lights, media_player.den_directv, device_tracker.sam,etc). We will use this column as the key column to access this table. A good key column should be unique and by definition, the HomeAssistant name of a device is unique.
+<p>
+USE_TYPE -  This is a field that describes how the device is used. This does not necessarily match the HomeAssistant device type. For example, light.den_ceiling_fan, is a homeassistant light (a device that is dimmable). But we are using the light switch to control a ceiling fan. So the USE_TYPE could be FAN. Whereas light.den_ceiling_fan_light is a light kit mounted on the ceiling fan and controlled separately. This allows us to figure out what light.ceiling_fan_light is without having to parse the name and guess what it is.
+<p>
+ON_STATE - Some devices indicate they are on by setting their state to ?on?. Others like the media player in my den, use ?playing? to indicate they are on. When the door to my office is open, it?s state is 23. This gives us a way to know what to check for when we check the state on a device.
+<p>
+OFF_STATE - Like ON_STATE just tracks the values associated with OFF for each device.
+<p>
+ON_BRIGHTNESS - When a light or fan is turned on, what brightness should be used.
+<P>
+OFF_BRIGHTNESS - When a light or fan is turned off, what brightness should be used. We have one room in our house that is always hot so we like to keep the ceiling fan running at half speed even when no one is home. So the off_brightness for this fan can be set to half it?s max_brightness.
+<p>
+MAX_BRIGHTNESS - what is the value associated with max brightness for this device.
+<p>
+ROOM - what room is the device installed in. This should match one of the room names in the ROOM table.
 <p>  
+The HOUSE table holds the information about our house and the rooms in the house. 
+<p>
+ROOM - This is the name of the room where a device may be installed. This is the unique key on this table. 
+<p>
+HOUSE_NAM - this allows us to track more than one property. You could track devices at your primary home and at rental property.
 
-The HOUSE table
-holds the information about our house and the rooms in the house. 
-
-ROOM ? This
-is the name of the room where a device may be installed. This is the unique key on this
-table. 
-
-HOUSE_NAME ?
-this allows us to track more than one property. You could track devices at your primary
-home and at rental property.
-
-OCCUPANT ?
-This is the name or maybe a device_tracker from the
-device table for the person that primarily occupies the room. This way when that person leaves home,
-we can turn off all devices in their room.
-If the room is a family room with no clear owner, this could be
-Everyone, or just left blank.
+OCCUPANT - This is the name or maybe a device_tracker from the device table for the person that primarily occupies the room. This way when that person leaves home, we can turn off all devices in their room. If the room is a family room with no clear owner, this could be Everyone, or just left blank.
 
 <p>We use the db_create_table function to create these tables.
+<p>
+We then use the db_insert function to insert rows into each table.
 
-We then use
-the db_insert function to insert rows into each
-table.
+<p>We can also update the data in the tables using db_update or delete rows if someone gets un-invited using db_delete.
 
-<p>We can also
-update the data in the tables using db_update or
-delete rows if someone gets un-invited using db_delete.
+Finally the part everyone has been waiting for, we can use SQL to ask the database for information. SQL uses a ?select? statement to ask for rows of data. We use the db_select function.
 
-Finally the part everyone has been waiting
-for, we can use SQL to ask the database for information. SQL uses a ?select? statement to ask for
-rows of data. We use the db_select function.
-
-A SQL
-statement to get a list of devices might look something like this.
-
+A SQL statement to get a list of devices might look something like this.
 <pre>SELECT HA_NAME, USE_TYPE FROM DEVICE 
 </pre>
 
