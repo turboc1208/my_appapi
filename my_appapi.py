@@ -158,12 +158,21 @@ class my_appapi(appapi.AppDaemon):
     self.call_service("notify/"+_service,title=_subject,message=_msg,target=_target)
 
   def get_state(self,target,attribute="state",**kwargs):
-    #self.log("in get_state target={}, attribute={}, kwargs={}".format(target,attribute,kwargs))
-    if not self.entity_exists(target):
-      _new_state=super().get_state(target,attribute)
+    self.log("in get_state target={}, attribute={}, kwargs={}".format(target,attribute,kwargs))
+    tst="x"
+    try:
+      tst=self.entity_exists(target)
+    except:
+      tst=None
+      pass
+    #self.log("tst={}".format(tst))
+    if tst==None:
+      #self.log("target={}".format(target))
+      entity_id=target
+      _new_state=super().get_state(entity_id,attribute)
     else:
       _new_state=super().get_state(target,attribute)
-      self.log("in get_state")
+      #self.log("in get_state state={}".format(_new_state))
       if "type" in kwargs:
         _type=kwargs["type"]
         if _type=="temperature":
@@ -186,7 +195,7 @@ class my_appapi(appapi.AppDaemon):
         elif _type=="motion":
           if _new_state=="8":
             _new_state="on"
-          else:
+          elif _new_state=="0":
             _new_state="off"
         elif _type=="door":
           if _new_state=="23":
